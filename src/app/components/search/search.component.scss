@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+
+  .virtual_scroll {
+    height: 100%;
+    width: 100%;
+
+    .accordion_container {
+      margin: 6rem 4rem;
+    }
+
+    .panel {
+      width: 90vw;
+      &_header {
+        padding: 1rem;
+        &_title {
+          display: flex;
+          flex-direction: row;
+          gap: 1rem;
+        }
+      }
+
+      &_content {
+        max-height: 70vh;
+        overflow: auto;
+        white-space: pre-wrap;
+        pre {
+          white-space: pre-wrap;
+        }
+        &_card {
+          li {
+            margin-left: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.json_toggle {
+  margin-left: auto;
+}

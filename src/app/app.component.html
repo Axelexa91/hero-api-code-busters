@@ -1,0 +1,17 @@
+<nav class="navigation">
+  <a #searchAnchor routerLink="search" class="button search" routerLinkActive="active" (click)="focusOnSearch()">
+    <span class="search_label">search</span>
+    <ng-template [ngIf]="this.searchAnchor.className.includes('active')">
+      <span class="search_icon">Q</span>
+      <input #searchInput class="search_input" type="text" (input)="search($event)">
+      <span class="search_reset" (click)="clearInput()">X</span>
+    </ng-template>
+  </a>
+  <a #compareAnchor routerLink="compare" class="button compare" routerLinkActive="active">
+    <span>compare</span>
+  </a>
+  <a #creditsAnchor routerLink="credits" class="button credits" routerLinkActive="active">
+    <span>credits</span>
+  </a>
+</nav>
+<router-outlet></router-outlet>

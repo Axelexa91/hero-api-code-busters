@@ -1,0 +1,48 @@
+<div class="container">
+  <cdk-virtual-scroll-viewport itemSize="80" minBufferPx="900" maxBufferPx="1200" class="virtual_scroll">
+    <div class="accordion_container">
+      <mat-accordion>
+        <mat-expansion-panel hideToggle *cdkVirtualFor="let hero of filteredHeroList$ | async; templateCacheSize: 0"
+          class="virtual_scroll_item panel">
+          <mat-expansion-panel-header class="panel_header">
+            <mat-panel-title class="panel_header_title">
+              <img [src]="hero.images.xs" alt="">
+              {{hero.name}}
+            </mat-panel-title>
+            <mat-panel-description class="panel_header_description">
+              Upperhand : {{sortStats(hero).pop()}} ; Weakness : {{sortStats(hero)[0]}}
+              <div class="json_toggle" (click)="$event.stopPropagation()">
+                <mat-slide-toggle #toggle>show raw</mat-slide-toggle>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <ng-template matExpansionPanelContent>
+            <div class="panel_content">
+              <pre *ngIf="toggle.checked; else listTemplate">
+                {{hero |json}}
+              </pre>
+              <ng-template #listTemplate>
+                <div class="panel_content_card" *ngFor="let attribute of getProps(hero)">
+                  <ng-template [ngTemplateOutlet]="recursiveJsonDisplay"
+                    [ngTemplateOutletContext]="{jsonObject: hero[attribute], prop: attribute}"></ng-template>
+                </div>
+              </ng-template>
+            </div>
+          </ng-template>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</div>
+
+<ng-template #recursiveJsonDisplay let-jsonObject="jsonObject" let-prop="prop">
+  <ul>
+    {{prop}} <span *ngIf="!getProps(jsonObject).length">: {{jsonObject}}</span>
+    <li *ngFor="let property of getProps(jsonObject)">
+      <ng-template [ngTemplateOutlet]="recursiveJsonDisplay"
+        [ngTemplateOutletContext]="{jsonObject: jsonObject[property], prop: property}"></ng-template>
+    </li>
+  </ul>
+</ng-template>

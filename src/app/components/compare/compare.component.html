@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="left">
+    <ng-template [ngTemplateOutlet]="compareSide" [ngTemplateOutletContext]="{side: 'left'}"></ng-template>
+  </div>
+  <div class="right">
+    <ng-template [ngTemplateOutlet]="compareSide" [ngTemplateOutletContext]="{side: 'right'}"></ng-template>
+
+  </div>
+</div>
+
+
+<ng-template #compareSide let-side="side">
+  <mat-card class="side_card">
+    <mat-card-header class="side_card_header">
+      <input #sideInput type="text" placeholder="Search Hero" matInput [matAutocomplete]="auto"
+        (focus)="search(sideInput.value, side)" (input)="search(sideInput.value, side)">
+    </mat-card-header>
+    <img *ngIf="asHero($any(displayedHero)[side]); else chooseHero " class="side_card_image" mat-card-image
+      [src]="asHero($any(displayedHero)[side]).images?.lg" alt="Loading">
+    <ng-template #chooseHero>Choose a hero to compare</ng-template>
+    <mat-card-content class="side_card_content">
+      <div class="stat" [style.direction]="side === 'left' ? 'ltr' : 'rtl' "
+        *ngFor="let stat of getProps(asHero($any(displayedHero)[side])?.powerstats)">
+        <span>{{stat}}</span><span
+          [class.stronger]="isStronger(side, stat)">{{asHero($any(displayedHero)[side])?.powerstats?.[stat]}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="autoCompleteDisplayMethod"
+    (optionSelected)="selectHero($event.option.value.id, side)">
+    <mat-option *ngFor="let hero of asHeroList($any(filteredOptions)[side])" [value]="hero">
+      {{hero.name}}
+    </mat-option>
+  </mat-autocomplete>
+</ng-template>
